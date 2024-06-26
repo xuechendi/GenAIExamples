@@ -1,0 +1,9 @@
+# Copyright (C) 2024 Intel Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+google-finance:
+  callable_api: google-finance
+  env: SERPAPI_API_KEY=${SERPAPI_API_KEY}
+  pip_dependencies: google-search-results>=2.4.2
+duckduckgo_search:
+  callable_api: ddg-search
