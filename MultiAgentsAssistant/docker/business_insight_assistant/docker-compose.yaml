@@ -1,0 +1,49 @@
+version: "3"
+networks:
+  default:
+    driver: bridge
+services:
+  ui:
+    build:
+      dockerfile: Dockerfile.UI
+    ports:
+      - ${AGENT_SERVICE_PORT}:${AGENT_SERVICE_PORT}
+    container_name: agent-ui
+    environment:
+      - port=${AGENT_SERVICE_PORT}
+      - endpoint=/v1/chat/completions
+  
+  llm:
+    ports: 
+      - ${LLM_SERVICE_PORT}:${LLM_SERVICE_PORT}
+    image: opea/llm-tgi:latest
+    environment:
+      - port=${LLM_SERVICE_PORT}
+      - endpoint=/v1/chat/completions
+  
+  supervisor_agent:
+    ports:
+        - ${SUPERVISOR_AGENT_PORT}:${SUPERVISOR_AGENT_PORT}
+    image: opea/supervisor-agent:latest
+    environment:
+      - port=${SUPERVISOR_AGENT_PORT}
+      - endpoint=/v1/supervisor
+    env_file: configs/supervisor_agent.env
+  
+  research_agent:
+    ports:
+        - ${RESEARCH_AGENT_PORT}:${RESEARCH_AGENT_PORT}
+    image: opea/research-agent:latest
+    environment:
+      - port=${RESEARCH_AGENT_PORT}
+      - endpoint=/v1/research
+    env_file: configs/research_agent.env
+  
+  writer_agent:
+    ports:
+        - ${WRITER_AGENT_PORT}:${WRITER_AGENT_PORT}
+    image: opea/writer-agent:latest
+    environment:
+      - port=${WRITER_AGENT_PORT}
+      - endpoint=/v1/writer
+    env_file: configs/writer_agent.env
